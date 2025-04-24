@@ -1,14 +1,14 @@
 import streamlit as st
 from cryptography.fernet import Fernet
 
-# Title
+
 st.title("🔐 Secure Data Encryption System")
 st.write("**By: Barirah Mansoor**")
 
-# Sidebar for mode selection
+
 mode = st.sidebar.selectbox("Choose Encryption Type", ["Caesar Cipher", "Fernet Encryption"])
 
-# Caesar Cipher Functions
+
 def caesar_encrypt(text, shift):
     encrypted = ""
     for char in text:
@@ -22,7 +22,8 @@ def caesar_encrypt(text, shift):
 def caesar_decrypt(text, shift):
     return caesar_encrypt(text, -shift)
 
-# Fernet Encryption Key Setup
+
+
 key = st.session_state.get("fernet_key", Fernet.generate_key())
 st.session_state["fernet_key"] = key
 fernet = Fernet(key)
