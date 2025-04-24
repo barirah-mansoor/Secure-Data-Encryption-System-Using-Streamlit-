@@ -1,14 +1,10 @@
 import streamlit as st
-from cryptography.fernet import fernet
-
+from cryptography.fernet import Fernet
 
 st.title("🔐 Secure Data Encryption System")
 st.write("**By: Barirah Mansoor**")
 
-
 mode = st.sidebar.selectbox("Choose Encryption Type", ["Caesar Cipher", "Fernet Encryption"])
-
-
 def caesar_encrypt(text, shift):
     encrypted = ""
     for char in text:
@@ -22,17 +18,13 @@ def caesar_encrypt(text, shift):
 def caesar_decrypt(text, shift):
     return caesar_encrypt(text, -shift)
 
-
-
-key = st.session_state.get("fernet_key", fernet.generate_key())
+key = st.session_state.get("fernet_key", Fernet.generate_key())
 st.session_state["fernet_key"] = key
-fernet = fernet(key)
+cipher = Fernet(key)
 
-# Input
 user_input = st.text_area("Enter your text:")
 action = st.radio("Action", ["Encrypt", "Decrypt"])
 
-# Processing
 if mode == "Caesar Cipher":
     shift = st.slider("Choose Shift", 1, 25, 3)
     if action == "Encrypt":
@@ -42,18 +34,16 @@ if mode == "Caesar Cipher":
 
 elif mode == "Fernet Encryption":
     if action == "Encrypt":
-        result = fernet.encrypt(user_input.encode()).decode()
+        result = cipher.encrypt(user_input.encode()).decode()
     else:
         try:
-            result = fernet.decrypt(user_input.encode()).decode()
+            result = cipher.decrypt(user_input.encode()).decode()
         except Exception as e:
             result = f"❌ Decryption failed: {str(e)}"
 
-# Output
 if user_input:
     st.subheader("🔎 Result:")
     st.code(result)
 
-# Show Fernet key (for demonstration)
 if mode == "Fernet Encryption":
-    st.caption(f"Fernet Key (keep it secret!): `{key.decode()}`")
+    st.caption(f"Fernet Key (keep this secure!): `{key.decode()}`")
