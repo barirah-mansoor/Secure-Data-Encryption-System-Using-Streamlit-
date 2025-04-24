@@ -1,5 +1,5 @@
 import streamlit as st
-from cryptography.fernet import Fernet
+from cryptography.fernet import fernet
 
 
 st.title("🔐 Secure Data Encryption System")
@@ -24,9 +24,9 @@ def caesar_decrypt(text, shift):
 
 
 
-key = st.session_state.get("fernet_key", Fernet.generate_key())
+key = st.session_state.get("fernet_key", fernet.generate_key())
 st.session_state["fernet_key"] = key
-fernet = Fernet(key)
+fernet = fernet(key)
 
 # Input
 user_input = st.text_area("Enter your text:")
